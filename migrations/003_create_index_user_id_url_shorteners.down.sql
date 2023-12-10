@@ -1,0 +1,1 @@
+DROP INDEX IF EXISTS idx_url_shorteners_user_id;

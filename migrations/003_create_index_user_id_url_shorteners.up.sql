@@ -1,0 +1,1 @@
+CREATE INDEX idx_url_shorteners_user_id ON url_shorteners (user_id);

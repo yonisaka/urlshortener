@@ -1,0 +1,24 @@
+version: v1
+plugins:
+  # go
+  - name: go
+    out: .
+    strategy: directory
+    opt: module=github.com/yonisaka/urlshortener
+  - name: go-grpc
+    out: .
+    strategy: directory
+    opt: module=github.com/yonisaka/urlshortener
+  - name: validate
+    out: .
+    opt:
+      - lang=go
+      - validate_out="lang=go:./go/src/"
+      - module=github.com/yonisaka/urlshortener
+  # grpc gateway
+  - name: grpc-gateway
+    out: .
+    opt:
+      - generate_unbound_methods=true
+      - module=github.com/yonisaka/urlshortener
+    strategy: directory

@@ -1,0 +1,22 @@
+// entity
+syntax = "proto3";
+
+package e; // entities
+
+// Import https://protobuf.dev/reference/protobuf/google.protobuf/#timestamp.
+import "google/protobuf/timestamp.proto";
+
+// Target of Go package.
+option go_package = "github.com/yonisaka/urlshortener/api/go/grpc";
+
+// URLShortener
+message URLShortener {
+  // The ID of User.
+  int64 user_id = 1;
+  // The original url.
+  string original_url = 2;
+  // The shortened url.
+  string shortened_url = 3;
+  // The date and time of the created url shortener.
+  google.protobuf.Timestamp datetime = 4;
+}
