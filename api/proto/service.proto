@@ -66,6 +66,13 @@ service URLShortenerService {
       get: "/v1/url-shortener",
     };
   }
+  // GetShortenedURL get the shortened URL.
+  rpc GetShortenedURL(GetShortenedURLRequest) returns (e.URLShortener) {
+    option (google.api.http) = {
+      post: "/v1/shortened-url",
+      body: "*",
+    };
+  }
 }
 
 // CreateURLShortener
@@ -86,6 +93,11 @@ message ListURLShortenerRequest {
   google.protobuf.Timestamp start_datetime = 2 [(validate.rules).timestamp.required = true];
   // (Required) The end date and time filter of the transactions.
   google.protobuf.Timestamp end_datetime = 3 [(validate.rules).timestamp.required = true];
+}
+
+message GetShortenedURLRequest {
+  // (Required) The Original URL to be shortened.
+  string url = 1 [(validate.rules).string.min_len = 1, (validate.rules).string.max_len = 2048];
 }
 
 // ListURLShortenerResponse

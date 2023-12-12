@@ -49,7 +49,7 @@ mock:
 	go generate ./...
 
 build-protoc:
-	docker build -t url-shortener-protoc -f build/protoc/Dockerfile .
+	docker build -t urlshortener-protoc -f build/protoc/Dockerfile .
 
 docker-protoc:
-	docker run --rm -v `pwd`:/go/src/github.com/yonisaka/url-shortener url-shortener-protoc
+	docker run --rm -v `pwd`:/go/src/github.com/yonisaka/urlshortener urlshortener-protoc

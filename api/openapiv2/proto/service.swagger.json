@@ -1,0 +1,282 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "URL Shortener Service",
+    "version": "0.1"
+  },
+  "tags": [
+    {
+      "name": "URLShortenerService"
+    }
+  ],
+  "host": "localhost:8081",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/shortened-url": {
+      "post": {
+        "summary": "GetShortenedURL get the shortened URL.",
+        "operationId": "URLShortenerService_GetShortenedURL",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/eURLShortener"
+            }
+          },
+          "400": {
+            "description": "Returned when the request parameters are invalid.",
+            "schema": {}
+          },
+          "401": {
+            "description": "Returned when the request lacks valid authentication credentials.",
+            "schema": {}
+          },
+          "403": {
+            "description": "Returned when the user does not have permission to access the resource.",
+            "schema": {}
+          },
+          "500": {
+            "description": "Returned when the server encountered an unexpected condition that prevented it from fulfilling the request.",
+            "schema": {}
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetShortenedURLRequest"
+            }
+          }
+        ],
+        "tags": [
+          "URLShortenerService"
+        ]
+      }
+    },
+    "/v1/url-shortener": {
+      "get": {
+        "summary": "ListURLShortener get the list of records for BTC transaction.\nThe record can be filtered by specific User.",
+        "operationId": "URLShortenerService_ListURLShortener",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ListURLShortenerResponse"
+            }
+          },
+          "400": {
+            "description": "Returned when the request parameters are invalid.",
+            "schema": {}
+          },
+          "401": {
+            "description": "Returned when the request lacks valid authentication credentials.",
+            "schema": {}
+          },
+          "403": {
+            "description": "Returned when the user does not have permission to access the resource.",
+            "schema": {}
+          },
+          "500": {
+            "description": "Returned when the server encountered an unexpected condition that prevented it from fulfilling the request.",
+            "schema": {}
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "description": "(Required) The ID of User.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "startDatetime",
+            "description": "(Required) The start date and time filter of the transactions.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "endDatetime",
+            "description": "(Required) The end date and time filter of the transactions.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "tags": [
+          "URLShortenerService"
+        ]
+      },
+      "post": {
+        "summary": "CreateURL creates a new record for URL Shortener.\nOnly single transaction will create by this RPC for a specific User.",
+        "operationId": "URLShortenerService_CreateURL",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/eURLShortener"
+            }
+          },
+          "400": {
+            "description": "Returned when the request parameters are invalid.",
+            "schema": {}
+          },
+          "401": {
+            "description": "Returned when the request lacks valid authentication credentials.",
+            "schema": {}
+          },
+          "403": {
+            "description": "Returned when the user does not have permission to access the resource.",
+            "schema": {}
+          },
+          "500": {
+            "description": "Returned when the server encountered an unexpected condition that prevented it from fulfilling the request.",
+            "schema": {}
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateURLShortener"
+            }
+          }
+        ],
+        "tags": [
+          "URLShortenerService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CreateURLShortener": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "format": "int64",
+          "description": "(Required) The ID of User."
+        },
+        "url": {
+          "type": "string",
+          "description": "(Required) The URL to be shortened."
+        },
+        "datetime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "(Required) The date and time of the created transaction."
+        }
+      },
+      "title": "CreateURLShortener"
+    },
+    "GetShortenedURLRequest": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "(Required) The Original URL to be shortened."
+        }
+      }
+    },
+    "ListURLShortenerResponse": {
+      "type": "object",
+      "properties": {
+        "urlShortener": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/eURLShortener"
+          },
+          "description": "The list of Transactions."
+        }
+      },
+      "title": "ListURLShortenerResponse"
+    },
+    "eURLShortener": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "format": "int64",
+          "description": "The ID of User."
+        },
+        "originalUrl": {
+          "type": "string",
+          "description": "The original url."
+        },
+        "shortenedUrl": {
+          "type": "string",
+          "description": "The shortened url."
+        },
+        "datetime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date and time of the created url shortener."
+        }
+      },
+      "title": "URLShortener"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}
