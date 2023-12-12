@@ -21,9 +21,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	URLShortenerService_CreateURL_FullMethodName        = "/URLShortenerService/CreateURL"
-	URLShortenerService_ListURLShortener_FullMethodName = "/URLShortenerService/ListURLShortener"
-	URLShortenerService_GetShortenedURL_FullMethodName  = "/URLShortenerService/GetShortenedURL"
+	URLShortenerService_CreateURLShortener_FullMethodName = "/URLShortenerService/CreateURLShortener"
+	URLShortenerService_ListURLShortener_FullMethodName   = "/URLShortenerService/ListURLShortener"
+	URLShortenerService_GetShortenedURL_FullMethodName    = "/URLShortenerService/GetShortenedURL"
 )
 
 // URLShortenerServiceClient is the client API for URLShortenerService service.
@@ -32,7 +32,7 @@ const (
 type URLShortenerServiceClient interface {
 	// CreateURL creates a new record for URL Shortener.
 	// Only single transaction will create by this RPC for a specific User.
-	CreateURL(ctx context.Context, in *CreateURLShortener, opts ...grpc.CallOption) (*URLShortener, error)
+	CreateURLShortener(ctx context.Context, in *CreateURLShortenerRequest, opts ...grpc.CallOption) (*URLShortener, error)
 	// ListURLShortener get the list of records for BTC transaction.
 	// The record can be filtered by specific User.
 	ListURLShortener(ctx context.Context, in *ListURLShortenerRequest, opts ...grpc.CallOption) (*ListURLShortenerResponse, error)
@@ -48,9 +48,9 @@ func NewURLShortenerServiceClient(cc grpc.ClientConnInterface) URLShortenerServi
 	return &uRLShortenerServiceClient{cc}
 }
 
-func (c *uRLShortenerServiceClient) CreateURL(ctx context.Context, in *CreateURLShortener, opts ...grpc.CallOption) (*URLShortener, error) {
+func (c *uRLShortenerServiceClient) CreateURLShortener(ctx context.Context, in *CreateURLShortenerRequest, opts ...grpc.CallOption) (*URLShortener, error) {
 	out := new(URLShortener)
-	err := c.cc.Invoke(ctx, URLShortenerService_CreateURL_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, URLShortenerService_CreateURLShortener_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +81,7 @@ func (c *uRLShortenerServiceClient) GetShortenedURL(ctx context.Context, in *Get
 type URLShortenerServiceServer interface {
 	// CreateURL creates a new record for URL Shortener.
 	// Only single transaction will create by this RPC for a specific User.
-	CreateURL(context.Context, *CreateURLShortener) (*URLShortener, error)
+	CreateURLShortener(context.Context, *CreateURLShortenerRequest) (*URLShortener, error)
 	// ListURLShortener get the list of records for BTC transaction.
 	// The record can be filtered by specific User.
 	ListURLShortener(context.Context, *ListURLShortenerRequest) (*ListURLShortenerResponse, error)
@@ -94,8 +94,8 @@ type URLShortenerServiceServer interface {
 type UnimplementedURLShortenerServiceServer struct {
 }
 
-func (UnimplementedURLShortenerServiceServer) CreateURL(context.Context, *CreateURLShortener) (*URLShortener, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateURL not implemented")
+func (UnimplementedURLShortenerServiceServer) CreateURLShortener(context.Context, *CreateURLShortenerRequest) (*URLShortener, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateURLShortener not implemented")
 }
 func (UnimplementedURLShortenerServiceServer) ListURLShortener(context.Context, *ListURLShortenerRequest) (*ListURLShortenerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListURLShortener not implemented")
@@ -116,20 +116,20 @@ func RegisterURLShortenerServiceServer(s grpc.ServiceRegistrar, srv URLShortener
 	s.RegisterService(&URLShortenerService_ServiceDesc, srv)
 }
 
-func _URLShortenerService_CreateURL_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateURLShortener)
+func _URLShortenerService_CreateURLShortener_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateURLShortenerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(URLShortenerServiceServer).CreateURL(ctx, in)
+		return srv.(URLShortenerServiceServer).CreateURLShortener(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: URLShortenerService_CreateURL_FullMethodName,
+		FullMethod: URLShortenerService_CreateURLShortener_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(URLShortenerServiceServer).CreateURL(ctx, req.(*CreateURLShortener))
+		return srv.(URLShortenerServiceServer).CreateURLShortener(ctx, req.(*CreateURLShortenerRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -178,8 +178,8 @@ var URLShortenerService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*URLShortenerServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateURL",
-			Handler:    _URLShortenerService_CreateURL_Handler,
+			MethodName: "CreateURLShortener",
+			Handler:    _URLShortenerService_CreateURLShortener_Handler,
 		},
 		{
 			MethodName: "ListURLShortener",

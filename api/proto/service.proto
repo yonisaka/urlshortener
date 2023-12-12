@@ -2,15 +2,15 @@
 syntax = "proto3";
 
 // Import entity proto.
-import "proto/entity.proto";
+import "../proto/entity.proto";
 // Import https://github.com/bufbuild/protoc-gen-validate.
-import "validate/validate.proto";
+//import "validate/validate.proto";
 // Import https://protobuf.dev/reference/protobuf/google.protobuf/#timestamp.
 import "google/protobuf/timestamp.proto";
 // Import https://github.com/googleapis/googleapis/blob/master/google/api/annotations.proto.
 import "google/api/annotations.proto";
 // Import https://github.com/grpc-ecosystem/grpc-gateway/blob/main/protoc-gen-openapiv2/options/annotations.proto.
-import "protoc-gen-openapiv2/options/annotations.proto";
+//import "protoc-gen-openapiv2/options/annotations.proto";
 
 // Target of Go package.
 option go_package = "github.com/yonisaka/urlshortener/api/go/grpc";
@@ -53,7 +53,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 service URLShortenerService {
   // CreateURL creates a new record for URL Shortener.
   // Only single transaction will create by this RPC for a specific User.
-  rpc CreateURL(CreateURLShortener) returns (e.URLShortener) {
+  rpc CreateURLShortener(CreateURLShortenerRequest) returns (e.URLShortener) {
     option (google.api.http) = {
       post: "/v1/url-shortener",
       body: "*",
@@ -75,8 +75,8 @@ service URLShortenerService {
   }
 }
 
-// CreateURLShortener
-message CreateURLShortener {
+// CreateURLShortenerRequest
+message CreateURLShortenerRequest {
   // (Required) The ID of User.
   int64 user_id = 1 [(validate.rules).int64.gte = 1];
   // (Required) The URL to be shortened.

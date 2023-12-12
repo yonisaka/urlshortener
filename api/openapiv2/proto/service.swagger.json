@@ -135,7 +135,7 @@
       },
       "post": {
         "summary": "CreateURL creates a new record for URL Shortener.\nOnly single transaction will create by this RPC for a specific User.",
-        "operationId": "URLShortenerService_CreateURL",
+        "operationId": "URLShortenerService_CreateURLShortener",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -172,7 +172,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/CreateURLShortener"
+              "$ref": "#/definitions/CreateURLShortenerRequest"
             }
           }
         ],
@@ -183,7 +183,7 @@
     }
   },
   "definitions": {
-    "CreateURLShortener": {
+    "CreateURLShortenerRequest": {
       "type": "object",
       "properties": {
         "userId": {
@@ -201,7 +201,7 @@
           "description": "(Required) The date and time of the created transaction."
         }
       },
-      "title": "CreateURLShortener"
+      "title": "CreateURLShortenerRequest"
     },
     "GetShortenedURLRequest": {
       "type": "object",

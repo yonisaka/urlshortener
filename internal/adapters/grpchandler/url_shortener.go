@@ -32,7 +32,7 @@ func (h *urlShortenerHandler) ListURLShortener(ctx context.Context, req *rpc.Lis
 	})
 }
 
-func (h *urlShortenerHandler) CreateURLShortener(ctx context.Context, req *rpc.CreateURLShortener) (*rpc.URLShortener, error) {
+func (h *urlShortenerHandler) CreateURLShortener(ctx context.Context, req *rpc.CreateURLShortenerRequest) (*rpc.URLShortener, error) {
 	return h.uc.CreateURLShortener(ctx, &repository.CreateURLShortenerParams{
 		UserID:   req.GetUserId(),
 		URL:      req.GetUrl(),

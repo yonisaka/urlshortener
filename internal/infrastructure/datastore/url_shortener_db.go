@@ -63,15 +63,17 @@ func (r *urlShortenerRepo) CreateURLShortener(ctx context.Context, params *repos
 	}
 
 	err = r.dbMaster.QueryRow(ctx,
-		"INSERT INTO url_shorteners (user_id, original_url, shortened_url, created_at, updated_at) VALUES ($1, $2, $3, $4, $5) RETURNING id",
-		params.UserID, params.URL, params.ShortenedURL, params.DateTime, params.DateTime).Scan(&id)
+		"INSERT INTO url_shorteners (user_id, original_url, shortened_url, datetime) VALUES ($1, $2, $3, $4) RETURNING id",
+		params.UserID, params.URL, params.ShortenedURL, params.DateTime).Scan(&id)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create url: %w", err)
 	}
 
 	return &rpc.URLShortener{
-		OriginalUrl: params.URL,
-		Datetime:    timestamppb.New(params.DateTime),
+		UserId:       params.UserID,
+		OriginalUrl:  params.URL,
+		ShortenedUrl: params.ShortenedURL,
+		Datetime:     timestamppb.New(params.DateTime),
 	}, nil
 }
 

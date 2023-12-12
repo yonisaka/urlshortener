@@ -35,22 +35,22 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on CreateURLShortener with the rules
+// Validate checks the field values on CreateURLShortenerRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *CreateURLShortener) Validate() error {
+func (m *CreateURLShortenerRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on CreateURLShortener with the rules
-// defined in the proto definition for this message. If any rules are
+// ValidateAll checks the field values on CreateURLShortenerRequest with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// CreateURLShortenerMultiError, or nil if none found.
-func (m *CreateURLShortener) ValidateAll() error {
+// CreateURLShortenerRequestMultiError, or nil if none found.
+func (m *CreateURLShortenerRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *CreateURLShortener) validate(all bool) error {
+func (m *CreateURLShortenerRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -58,7 +58,7 @@ func (m *CreateURLShortener) validate(all bool) error {
 	var errors []error
 
 	if m.GetUserId() < 1 {
-		err := CreateURLShortenerValidationError{
+		err := CreateURLShortenerRequestValidationError{
 			field:  "UserId",
 			reason: "value must be greater than or equal to 1",
 		}
@@ -69,7 +69,7 @@ func (m *CreateURLShortener) validate(all bool) error {
 	}
 
 	if l := utf8.RuneCountInString(m.GetUrl()); l < 1 || l > 2048 {
-		err := CreateURLShortenerValidationError{
+		err := CreateURLShortenerRequestValidationError{
 			field:  "Url",
 			reason: "value length must be between 1 and 2048 runes, inclusive",
 		}
@@ -80,7 +80,7 @@ func (m *CreateURLShortener) validate(all bool) error {
 	}
 
 	if m.GetDatetime() == nil {
-		err := CreateURLShortenerValidationError{
+		err := CreateURLShortenerRequestValidationError{
 			field:  "Datetime",
 			reason: "value is required",
 		}
@@ -91,19 +91,19 @@ func (m *CreateURLShortener) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return CreateURLShortenerMultiError(errors)
+		return CreateURLShortenerRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// CreateURLShortenerMultiError is an error wrapping multiple validation errors
-// returned by CreateURLShortener.ValidateAll() if the designated constraints
-// aren't met.
-type CreateURLShortenerMultiError []error
+// CreateURLShortenerRequestMultiError is an error wrapping multiple validation
+// errors returned by CreateURLShortenerRequest.ValidateAll() if the
+// designated constraints aren't met.
+type CreateURLShortenerRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m CreateURLShortenerMultiError) Error() string {
+func (m CreateURLShortenerRequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -112,11 +112,11 @@ func (m CreateURLShortenerMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m CreateURLShortenerMultiError) AllErrors() []error { return m }
+func (m CreateURLShortenerRequestMultiError) AllErrors() []error { return m }
 
-// CreateURLShortenerValidationError is the validation error returned by
-// CreateURLShortener.Validate if the designated constraints aren't met.
-type CreateURLShortenerValidationError struct {
+// CreateURLShortenerRequestValidationError is the validation error returned by
+// CreateURLShortenerRequest.Validate if the designated constraints aren't met.
+type CreateURLShortenerRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -124,24 +124,24 @@ type CreateURLShortenerValidationError struct {
 }
 
 // Field function returns field value.
-func (e CreateURLShortenerValidationError) Field() string { return e.field }
+func (e CreateURLShortenerRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e CreateURLShortenerValidationError) Reason() string { return e.reason }
+func (e CreateURLShortenerRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e CreateURLShortenerValidationError) Cause() error { return e.cause }
+func (e CreateURLShortenerRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e CreateURLShortenerValidationError) Key() bool { return e.key }
+func (e CreateURLShortenerRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e CreateURLShortenerValidationError) ErrorName() string {
-	return "CreateURLShortenerValidationError"
+func (e CreateURLShortenerRequestValidationError) ErrorName() string {
+	return "CreateURLShortenerRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e CreateURLShortenerValidationError) Error() string {
+func (e CreateURLShortenerRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -153,14 +153,14 @@ func (e CreateURLShortenerValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sCreateURLShortener.%s: %s%s",
+		"invalid %sCreateURLShortenerRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = CreateURLShortenerValidationError{}
+var _ error = CreateURLShortenerRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -168,7 +168,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = CreateURLShortenerValidationError{}
+} = CreateURLShortenerRequestValidationError{}
 
 // Validate checks the field values on ListURLShortenerRequest with the rules
 // defined in the proto definition for this message. If any rules are
