@@ -1,0 +1,24 @@
+# test
+.coverage
+.godog
+
+# os x files
+*.DS_Store
+
+# log
+*.log
+
+# binary
+main
+url-shortener
+main-consumer
+
+# development data
+development/primary/data
+development/replica/data
+
+# vendor
+vendor/
+
+# html
+*.html
