@@ -142,14 +142,9 @@ func getChangedFile() ([]string, string, error) {
 	}
 
 	var files []string
-
-	fmt.Println(">>> Previous commit: " + previousCommit) // 05a33196589d44a4e67d1d2cd22d29e82efd9650
-	fmt.Println(">>> Last commit: " + lastCommit)         // 3093b1e2f74708b9040b717519044c645489e204
-	// 27ab8af3a625db4f92e55832b6fd0708c5e7de99
 	// Get changed file between previous latest commit id and current commit id
 	cmd, err = exec.Command("bash", "-c", "git diff --name-only "+previousCommit+" "+lastCommit).Output()
 	if err != nil {
-
 		return nil, "", err
 	}
 
