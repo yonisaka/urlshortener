@@ -170,7 +170,7 @@ func TestURLShortenerUC_ListURLShortener(t *testing.T) {
 			}
 
 			want := &rpc.ListURLShortenerResponse{
-				UrlShortener: urlShorteners,
+				UrlShorteners: urlShorteners,
 			}
 
 			mockJourneyRepo := repository.NewGoMockURLShortenerRepo(ctrl)

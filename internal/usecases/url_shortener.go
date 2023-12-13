@@ -23,7 +23,7 @@ func (u *urlShortenerUsecase) ListURLShortener(ctx context.Context, params *repo
 	}
 
 	list := &rpc.ListURLShortenerResponse{
-		UrlShortener: urlShorteners,
+		UrlShorteners: urlShorteners,
 	}
 
 	return list, nil

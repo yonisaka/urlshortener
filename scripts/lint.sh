@@ -2,17 +2,17 @@ PKGS=("cmd" "internal")
 ROOT=$(pwd)
 CODE=0
 
-for pkg in "${PKGS[@]}" ; do
-  cd $ROOT
+for pkg in "${PKGS[@]}"; do
+  cd "$ROOT/$pkg" || exit 1
   echo -e "\n>>> Running linting on $pkg" ;
-  folders=$(go list -f '{{.Dir}}' $ROOT/$pkg/... | grep -v -e "mock")
-  for folder in $folders; do
-    echo $folder
-    GOGC=20 golangci-lint run "$folder/..."
-    if [[ "$?" != "0" ]]; then
-      CODE=1
-    fi
-  done
+
+  # Run linting on the current package and its subpackages, excluding external packages
+  GOGC=20 golangci-lint run --exclude ".*" "./..."
+
+  # Check linting status
+  if [[ "$?" != "0" ]]; then
+    CODE=1
+  fi
 done
 
 if [[ "$CODE" != 0 ]]; then

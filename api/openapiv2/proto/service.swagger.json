@@ -57,6 +57,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "GetShortenedURLRequest is a request message for GetShortenedURL.",
             "in": "body",
             "required": true,
             "schema": {
@@ -169,6 +170,7 @@
         "parameters": [
           {
             "name": "body",
+            "description": "CreateURLShortenerRequest is a request message for CreateURLShortener.",
             "in": "body",
             "required": true,
             "schema": {
@@ -201,7 +203,7 @@
           "description": "(Required) The date and time of the created transaction."
         }
       },
-      "title": "CreateURLShortenerRequest"
+      "description": "CreateURLShortenerRequest is a request message for CreateURLShortener."
     },
     "GetShortenedURLRequest": {
       "type": "object",
@@ -210,12 +212,13 @@
           "type": "string",
           "description": "(Required) The Original URL to be shortened."
         }
-      }
+      },
+      "description": "GetShortenedURLRequest is a request message for GetShortenedURL."
     },
     "ListURLShortenerResponse": {
       "type": "object",
       "properties": {
-        "urlShortener": {
+        "urlShorteners": {
           "type": "array",
           "items": {
             "type": "object",

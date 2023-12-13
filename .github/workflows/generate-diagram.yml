@@ -57,11 +57,6 @@ jobs:
         with:
           name: generated-rpc-diagram
           path: docs
-      - name: Download readme
-        uses: actions/download-artifact@v3
-        with:
-          name: readme-from-rpc-diagram
-          path: .
       - name: Generate Diagram
         run: |
           make diagram

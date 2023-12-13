@@ -75,7 +75,7 @@ service URLShortenerService {
   }
 }
 
-// CreateURLShortenerRequest
+// CreateURLShortenerRequest is a request message for CreateURLShortener.
 message CreateURLShortenerRequest {
   // (Required) The ID of User.
   int64 user_id = 1 [(validate.rules).int64.gte = 1];
@@ -85,7 +85,7 @@ message CreateURLShortenerRequest {
   google.protobuf.Timestamp datetime = 3 [(validate.rules).timestamp.required = true];
 }
 
-// ListURLShortenerRequest
+// ListURLShortenerRequest is a request message for ListURLShortener.
 message ListURLShortenerRequest {
   // (Required) The ID of User.
   int64 user_id = 1 [(validate.rules).int64.gte = 1];
@@ -95,6 +95,7 @@ message ListURLShortenerRequest {
   google.protobuf.Timestamp end_datetime = 3 [(validate.rules).timestamp.required = true];
 }
 
+// GetShortenedURLRequest is a request message for GetShortenedURL.
 message GetShortenedURLRequest {
   // (Required) The Original URL to be shortened.
   string url = 1 [(validate.rules).string.min_len = 1, (validate.rules).string.max_len = 2048];
@@ -103,5 +104,5 @@ message GetShortenedURLRequest {
 // ListURLShortenerResponse
 message ListURLShortenerResponse {
   // The list of Transactions.
-  repeated e.URLShortener url_shortener = 1;
+  repeated e.URLShortener url_shorteners = 1;
 }
