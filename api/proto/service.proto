@@ -2,15 +2,15 @@
 syntax = "proto3";
 
 // Import entity proto.
-import "../proto/entity.proto";
+import "proto/entity.proto";
 // Import https://github.com/bufbuild/protoc-gen-validate.
-//import "validate/validate.proto";
+import "validate/validate.proto";
 // Import https://protobuf.dev/reference/protobuf/google.protobuf/#timestamp.
 import "google/protobuf/timestamp.proto";
 // Import https://github.com/googleapis/googleapis/blob/master/google/api/annotations.proto.
 import "google/api/annotations.proto";
 // Import https://github.com/grpc-ecosystem/grpc-gateway/blob/main/protoc-gen-openapiv2/options/annotations.proto.
-//import "protoc-gen-openapiv2/options/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
 
 // Target of Go package.
 option go_package = "github.com/yonisaka/urlshortener/api/go/grpc";
@@ -59,7 +59,7 @@ service URLShortenerService {
       body: "*",
     };
   }
-  // ListURLShortener get the list of records for BTC transaction.
+  // ListURLShortener get the list of records for URL Shortener.
   // The record can be filtered by specific User.
   rpc ListURLShortener(ListURLShortenerRequest) returns (ListURLShortenerResponse) {
     option (google.api.http) = {

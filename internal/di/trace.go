@@ -33,7 +33,7 @@ func GetTracer() trace.Provider {
 		if os.Getenv("OTEL_AGENT") != "" {
 			traceProvider, err = trace.NewProvider(trace.ProviderConfig{
 				JaegerEndpoint: os.Getenv("OTEL_AGENT"),
-				ServiceName:    "BTC Server",
+				ServiceName:    "URL Shortener Server",
 				ServiceVersion: "1.0.0",
 				Environment:    os.Getenv("APP_ENV"),
 				Disabled:       false,

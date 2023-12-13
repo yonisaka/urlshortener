@@ -33,7 +33,7 @@ type URLShortenerServiceClient interface {
 	// CreateURL creates a new record for URL Shortener.
 	// Only single transaction will create by this RPC for a specific User.
 	CreateURLShortener(ctx context.Context, in *CreateURLShortenerRequest, opts ...grpc.CallOption) (*URLShortener, error)
-	// ListURLShortener get the list of records for BTC transaction.
+	// ListURLShortener get the list of records for URL Shortener.
 	// The record can be filtered by specific User.
 	ListURLShortener(ctx context.Context, in *ListURLShortenerRequest, opts ...grpc.CallOption) (*ListURLShortenerResponse, error)
 	// GetShortenedURL get the shortened URL.
@@ -82,7 +82,7 @@ type URLShortenerServiceServer interface {
 	// CreateURL creates a new record for URL Shortener.
 	// Only single transaction will create by this RPC for a specific User.
 	CreateURLShortener(context.Context, *CreateURLShortenerRequest) (*URLShortener, error)
-	// ListURLShortener get the list of records for BTC transaction.
+	// ListURLShortener get the list of records for URL Shortener.
 	// The record can be filtered by specific User.
 	ListURLShortener(context.Context, *ListURLShortenerRequest) (*ListURLShortenerResponse, error)
 	// GetShortenedURL get the shortened URL.

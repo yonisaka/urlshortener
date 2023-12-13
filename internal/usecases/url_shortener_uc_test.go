@@ -7,12 +7,12 @@ import (
 )
 
 type fields struct {
-	btcRepo repository.URLShortenerRepo
+	urlShortenerRepo repository.URLShortenerRepo
 }
 
 func sut(f fields) usecases.URLShortenerUsecase {
 	return usecases.NewURLShortenerUsecase(
-		f.btcRepo,
+		f.urlShortenerRepo,
 		di.GetTracer().Tracer(),
 		di.GetLogger(),
 	)

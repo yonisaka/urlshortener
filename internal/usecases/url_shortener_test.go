@@ -71,7 +71,7 @@ func TestURLShortenerUC_CreateURLShortener(t *testing.T) {
 
 			return test{
 				fields: fields{
-					btcRepo: mockJourneyRepo,
+					urlShortenerRepo: mockJourneyRepo,
 				},
 				args:    args,
 				want:    want,
@@ -99,7 +99,7 @@ func TestURLShortenerUC_CreateURLShortener(t *testing.T) {
 
 			return test{
 				fields: fields{
-					btcRepo: mockJourneyRepo,
+					urlShortenerRepo: mockJourneyRepo,
 				},
 				args:    args,
 				want:    nil,
@@ -178,7 +178,7 @@ func TestURLShortenerUC_ListURLShortener(t *testing.T) {
 
 			return test{
 				fields: fields{
-					btcRepo: mockJourneyRepo,
+					urlShortenerRepo: mockJourneyRepo,
 				},
 				args:    args,
 				want:    want,
@@ -249,7 +249,7 @@ func TestURLShortenerUC_GetShortenedURL(t *testing.T) {
 
 			return test{
 				fields: fields{
-					btcRepo: mockJourneyRepo,
+					urlShortenerRepo: mockJourneyRepo,
 				},
 				args:    args,
 				want:    want,

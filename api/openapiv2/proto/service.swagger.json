@@ -71,7 +71,7 @@
     },
     "/v1/url-shortener": {
       "get": {
-        "summary": "ListURLShortener get the list of records for BTC transaction.\nThe record can be filtered by specific User.",
+        "summary": "ListURLShortener get the list of records for URL Shortener.\nThe record can be filtered by specific User.",
         "operationId": "URLShortenerService_ListURLShortener",
         "responses": {
           "200": {

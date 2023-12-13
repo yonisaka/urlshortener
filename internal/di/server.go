@@ -13,13 +13,13 @@ import (
 )
 
 var (
-	grpcServerOnce sync.Once
-	btcServer      server.Server
+	grpcServerOnce     sync.Once
+	urlShortenerServer server.Server
 )
 
 // GetURLShortenerGRPCServer returns gRPC server instance for URLShortener service.
 func GetURLShortenerGRPCServer() server.Server {
-	return getGRPCServer(btcServer, func(server *grpc.Server) {
+	return getGRPCServer(urlShortenerServer, func(server *grpc.Server) {
 		h := GetURLShortenerGRPCHandler()
 		rpc.RegisterURLShortenerServiceServer(server, h)
 	})
