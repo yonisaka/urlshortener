@@ -24,6 +24,8 @@ type urlShortenerHandler struct {
 	uc usecases.URLShortenerUsecase
 }
 
+// ListURLShortener returns a list of URLShortener.
+// it returns a list of URLShortener that matches the user ID and the date range.
 func (h *urlShortenerHandler) ListURLShortener(ctx context.Context, req *rpc.ListURLShortenerRequest) (*rpc.ListURLShortenerResponse, error) {
 	return h.uc.ListURLShortener(ctx, &repository.ListURLShortenerParams{
 		UserID:        req.GetUserId(),
@@ -32,6 +34,8 @@ func (h *urlShortenerHandler) ListURLShortener(ctx context.Context, req *rpc.Lis
 	})
 }
 
+// CreateURLShortener creates a new URLShortener.
+// with the user ID, the original URL, and the date time.
 func (h *urlShortenerHandler) CreateURLShortener(ctx context.Context, req *rpc.CreateURLShortenerRequest) (*rpc.URLShortener, error) {
 	return h.uc.CreateURLShortener(ctx, &repository.CreateURLShortenerParams{
 		UserID:   req.GetUserId(),
@@ -40,6 +44,8 @@ func (h *urlShortenerHandler) CreateURLShortener(ctx context.Context, req *rpc.C
 	})
 }
 
+// GetShortenedURL returns a shortened URL.
+// it returns a shortened URL that created from original URL.
 func (h *urlShortenerHandler) GetShortenedURL(ctx context.Context, req *rpc.GetShortenedURLRequest) (*rpc.URLShortener, error) {
 	return h.uc.GetShortenedURL(ctx, &repository.GetShortenedURLParams{
 		URL: req.GetUrl(),

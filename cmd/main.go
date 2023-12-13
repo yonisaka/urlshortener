@@ -18,7 +18,7 @@ func main() {
 	server := iDI.GetURLShortenerGRPCServer()
 	gateway := iDI.GetURLShortenerGatewayServer()
 
-	logger.Info("URLShortener service is ready")
+	logger.Info("URL Shortener service is ready")
 
 	go func() {
 		// Run() keeps its process until receiving any error
