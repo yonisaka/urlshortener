@@ -1,0 +1,52 @@
+name: Push File
+
+on:
+  workflow_call:
+
+jobs:
+  push-file:
+    name: Push File
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download generated proto
+        uses: actions/download-artifact@v3
+        with:
+          name: generated-proto
+          path: api
+      - name: Download generated diagrams
+        uses: actions/download-artifact@v3
+        with:
+          name: generated-diagram
+          path: docs
+      - name: Download readme diagram
+        uses: actions/download-artifact@v3
+        with:
+          name: readme-diagram
+          path: scripts/generate-diagram
+      - name: Download readme
+        uses: actions/download-artifact@v3
+        with:
+          name: readme-from-diagram
+          path: .
+      - name: Commit files
+        run: |
+          git config --local user.email "94128842+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # Check the status of the Git repository
+          status=$(git status --porcelain)
+
+          # If the repository is clean, exit with a non-zero status
+          if [ -z "$status" ]; then
+            echo "Nothing to commit, working tree clean"
+            exit 0
+          else
+            git add -A .
+            git commit -am "Generate Files"
+          fi
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}

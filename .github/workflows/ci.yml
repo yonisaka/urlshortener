@@ -1,0 +1,27 @@
+name: CI Workflow
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!main' # excludes main
+
+jobs:
+  lint:
+    uses: './.github/workflows/lint.yml'
+  test:
+    uses: './.github/workflows/test.yml'
+  generate-proto:
+    needs:
+      - lint
+      - test
+    uses: './.github/workflows/generate-proto.yml'
+  generate-diagram:
+    needs:
+      - generate-rpc-diagram
+    uses: './.github/workflows/generate-diagram.yml'
+  push-file:
+    needs:
+      - generate-proto
+      - generate-diagram
+    uses: './.github/workflows/push-file.yml.yml'

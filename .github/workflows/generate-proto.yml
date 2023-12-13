@@ -1,0 +1,64 @@
+name: Generate Proto
+
+on:
+  workflow_call:
+
+jobs:
+  check-commit:
+    name: Check for generated commit
+    runs-on: ubuntu-latest
+    outputs:
+      is_generated_commit: ${{ steps.check.outputs.result }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: check
+        name: Check for generated commit
+        run: |
+          set +e
+          git log --oneline -n 1 | grep 'Generate Files'
+          if [[ $? -eq 1 ]]; then
+            echo 'last commit is a target.'
+            echo "result=true" >> $GITHUB_OUTPUT
+          else
+            echo 'last commit is not a target.'
+            echo "result=false" >> $GITHUB_OUTPUT
+          fi
+  generate-proto:
+    name: Generate proto
+    needs: check-commit
+    if: needs.check-commit.outputs.is_generated_commit == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '>=1.19.x'
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-golang-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-golang-
+      - name : Install Dependencies
+        run: |
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
+          go install google.golang.org/protobuf/cmd/protoc-gen-go
+          go install github.com/envoyproxy/protoc-gen-validate
+          go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway
+          go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2
+      - name: Install Buf
+        uses: bufbuild/buf-setup-action@v1.14.0
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
+        with:
+          version: '3.19.2'
+      - name: Generate Proto
+        run: |
+          make protoc
+      - name: Upload generated proto files
+        uses: actions/upload-artifact@v3
+        with:
+          name: generated-proto
+          path: api

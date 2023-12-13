@@ -1,0 +1,82 @@
+name: Generate Diagram
+
+on:
+  workflow_call:
+
+jobs:
+  check-commit:
+    name: Check for generated commit
+    runs-on: ubuntu-latest
+    outputs:
+      is_generated_commit: ${{ steps.check.outputs.result }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: check
+        name: Check for generated commit
+        run: |
+          set +e
+          git log --oneline -n 1 | grep 'Generate Files'
+          if [[ $? -eq 1 ]]; then
+            echo 'last commit is a target.'
+            echo "result=true" >> $GITHUB_OUTPUT
+          else
+            echo 'last commit is not a target.'
+            echo "result=false" >> $GITHUB_OUTPUT
+          fi
+  generate-diagram:
+    name: Generate diagram
+    needs: check-commit
+    if: needs.check-commit.outputs.is_generated_commit == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Fetch Entire History
+        run: |
+          git fetch --unshallow
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '>=1.19.x'
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-golang-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-golang-
+      - name: Install Go-Callvis
+        run: |
+          git clone https://github.com/ofabry/go-callvis.git
+          cd go-callvis && make install
+      - name: Install pngquant
+        run: |
+          sudo apt-get update
+          sudo apt-get install pngquant
+      - name: Download generated RPC diagrams
+        uses: actions/download-artifact@v3
+        with:
+          name: generated-rpc-diagram
+          path: docs
+      - name: Download readme
+        uses: actions/download-artifact@v3
+        with:
+          name: readme-from-rpc-diagram
+          path: .
+      - name: Generate Diagram
+        run: |
+          make diagram
+      - name: Upload generated diagrams
+        uses: actions/upload-artifact@v3
+        with:
+          name: generated-diagram
+          path: docs
+      - name: Upload readme diagram
+        uses: actions/upload-artifact@v3
+        with:
+          name: readme-diagram
+          path: scripts/generate-diagram
+      - name: Upload readme
+        uses: actions/upload-artifact@v3
+        with:
+          name: readme-from-diagram
+          path: README.md
