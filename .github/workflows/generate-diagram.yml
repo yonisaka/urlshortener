@@ -52,11 +52,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install pngquant
-      - name: Download generated RPC diagrams
-        uses: actions/download-artifact@v3
-        with:
-          name: generated-rpc-diagram
-          path: docs
       - name: Generate Diagram
         run: |
           make diagram
