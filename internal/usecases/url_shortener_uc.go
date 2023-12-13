@@ -8,6 +8,9 @@ import (
 	"github.com/yonisaka/urlshortener/pkg/trace"
 )
 
+//go:generate rm -f ./url_shortener_uc_mock.go
+//go:generate mockgen -destination url_shortener_uc_mock.go -package usecases -mock_names URLShortenerUsecase=GoMockURLShortenerUsecase -source url_shortener_uc.go
+
 // URLShortenerUsecase is a usecase for URLShortener.
 type URLShortenerUsecase interface {
 	// ListURLShortener returns a list of URLShortener.

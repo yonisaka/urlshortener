@@ -6,6 +6,9 @@ import (
 	"time"
 )
 
+//go:generate rm -f ./url_shortener_mock.go
+//go:generate mockgen -destination url_shortener_mock.go -package repository -mock_names URLShortenerRepo=GoMockURLShortenerRepo -source url_shortener.go
+
 // ListURLShortenerParams is a parameter for ListURLShortener.
 type ListURLShortenerParams struct {
 	UserID        int64
