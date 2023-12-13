@@ -23,4 +23,4 @@ jobs:
     needs:
       - generate-proto
       - generate-diagram
-    uses: './.github/workflows/push-file.yml.yml'
+    uses: './.github/workflows/push-file.yml'
