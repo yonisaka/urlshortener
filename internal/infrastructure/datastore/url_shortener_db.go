@@ -28,6 +28,7 @@ func NewURLShortenerRepo(base *BaseRepo) repository.URLShortenerRepo {
 }
 
 // ListURLShortener returns a list of URLShortener.
+// with the given params UserID, StartDateTime, EndDateTime.
 func (r *urlShortenerRepo) ListURLShortener(ctx context.Context, params *repository.ListURLShortenerParams) ([]*rpc.URLShortener, error) {
 	query := `SELECT user_id, original_url, shortened_url, datetime 
 				FROM url_shorteners 
@@ -67,6 +68,7 @@ func (r *urlShortenerRepo) ListURLShortener(ctx context.Context, params *reposit
 }
 
 // CreateURLShortener creates a URLShortener.
+// with the given params UserID, URL, ShortenedURL, DateTime.
 func (r *urlShortenerRepo) CreateURLShortener(ctx context.Context, params *repository.CreateURLShortenerParams) (*rpc.URLShortener, error) {
 	var id int64
 	var err error
@@ -80,6 +82,7 @@ func (r *urlShortenerRepo) CreateURLShortener(ctx context.Context, params *repos
 		return nil, fmt.Errorf("failed to check if user exists: %w", err)
 	}
 
+	// check if url already exists
 	var shortenedURL string
 	err = r.dbSlave.QueryRow(ctx, "SELECT shortened_url FROM url_shorteners WHERE original_url = $1", params.URL).Scan(&shortenedURL)
 	if err != nil && !errors.Is(err, pgx.ErrNoRows) {
@@ -106,18 +109,18 @@ func (r *urlShortenerRepo) CreateURLShortener(ctx context.Context, params *repos
 }
 
 // GetShortenedURL returns a URLShortener.
+// with the given params URL (original_url).
 func (r *urlShortenerRepo) GetShortenedURL(ctx context.Context, params *repository.GetShortenedURLParams) (*rpc.URLShortener, error) {
-	type data struct {
+	// t is a temporary struct for storing the result of the query.
+	var t struct {
 		UserID       int64
 		OriginalURL  string
 		ShortenedURL string
 		Datetime     time.Time
 	}
 
-	var d data
-
 	err := r.dbSlave.QueryRow(ctx, "SELECT user_id, original_url, shortened_url, datetime FROM url_shorteners WHERE original_url = $1", params.URL).
-		Scan(&d.UserID, &d.OriginalURL, &d.ShortenedURL, &d.Datetime)
+		Scan(&t.UserID, &t.OriginalURL, &t.ShortenedURL, &t.Datetime)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, fmt.Errorf("url: %s not found: %w", params.URL, ErrNotFound)
 	}
@@ -127,9 +130,9 @@ func (r *urlShortenerRepo) GetShortenedURL(ctx context.Context, params *reposito
 	}
 
 	return &rpc.URLShortener{
-		UserId:       d.UserID,
-		OriginalUrl:  d.OriginalURL,
-		ShortenedUrl: d.ShortenedURL,
-		Datetime:     timestamppb.New(d.Datetime),
+		UserId:       t.UserID,
+		OriginalUrl:  t.OriginalURL,
+		ShortenedUrl: t.ShortenedURL,
+		Datetime:     timestamppb.New(t.Datetime),
 	}, nil
 }
