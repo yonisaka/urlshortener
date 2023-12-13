@@ -135,7 +135,7 @@
         ]
       },
       "post": {
-        "summary": "CreateURL creates a new record for URL Shortener.\nOnly single transaction will create by this RPC for a specific User.",
+        "summary": "CreateURLShortener creates a new record for URL Shortener.\nOnly single transaction will create by this RPC for a specific User.",
         "operationId": "URLShortenerService_CreateURLShortener",
         "responses": {
           "200": {
