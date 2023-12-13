@@ -16,8 +16,6 @@ jobs:
       - test
     uses: './.github/workflows/generate-proto.yml'
   generate-diagram:
-    needs:
-      - generate-rpc-diagram
     uses: './.github/workflows/generate-diagram.yml'
   push-file:
     needs:
