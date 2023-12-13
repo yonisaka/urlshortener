@@ -51,7 +51,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 // URLShortenerService is a service that handles URL shortener.
 service URLShortenerService {
-  // CreateURL creates a new record for URL Shortener.
+  // CreateURLShortener creates a new record for URL Shortener.
   // Only single transaction will create by this RPC for a specific User.
   rpc CreateURLShortener(CreateURLShortenerRequest) returns (e.URLShortener) {
     option (google.api.http) = {
