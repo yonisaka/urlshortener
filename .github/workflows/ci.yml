@@ -3,8 +3,7 @@ name: CI Workflow
 on:
   push:
     branches:
-      - '**'
-      - '!main' # excludes main
+      - 'main' # excludes main
 
 jobs:
   lint:
