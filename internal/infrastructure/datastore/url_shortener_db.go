@@ -7,13 +7,15 @@ import (
 	"github.com/jackc/pgx/v5"
 	rpc "github.com/yonisaka/urlshortener/api/go/grpc"
 	"github.com/yonisaka/urlshortener/internal/entities/repository"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"time"
 )
 
-var (
+const (
 	// ErrNotFound is an error for indicates record not found.
-	ErrNotFound = errors.New("error not found")
+	ErrNotFound = "error not found"
 )
 
 type urlShortenerRepo struct {
@@ -37,7 +39,7 @@ func (r *urlShortenerRepo) ListURLShortener(ctx context.Context, params *reposit
 
 	rows, err := r.dbSlave.Query(ctx, query, params.UserID, params.StartDateTime, params.EndDateTime)
 	if err != nil {
-		return nil, fmt.Errorf("failed to query url shorteners: %w", err)
+		return nil, status.Error(codes.Internal, fmt.Sprintf("failed to query url shorteners: %s", err))
 	}
 	defer rows.Close()
 
@@ -53,7 +55,7 @@ func (r *urlShortenerRepo) ListURLShortener(ctx context.Context, params *reposit
 	for rows.Next() {
 		var d data
 		if err := rows.Scan(&d.UserID, &d.OriginalURL, &d.ShortenedURL, &d.Datetime); err != nil {
-			return nil, fmt.Errorf("failed to scan url shortener: %w", err)
+			return nil, status.Error(codes.Internal, fmt.Sprintf("failed to scan url shortener: %s", err))
 		}
 
 		urlShorteners = append(urlShorteners, &rpc.URLShortener{
@@ -75,29 +77,29 @@ func (r *urlShortenerRepo) CreateURLShortener(ctx context.Context, params *repos
 
 	err = r.dbSlave.QueryRow(ctx, "SELECT id FROM users WHERE id = $1", params.UserID).Scan(&id)
 	if errors.Is(err, pgx.ErrNoRows) {
-		return nil, fmt.Errorf("user id: %d not found: %w", params.UserID, ErrNotFound)
+		return nil, status.Error(codes.NotFound, ErrNotFound)
 	}
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to check if user exists: %w", err)
+		return nil, status.Error(codes.Internal, fmt.Sprintf("failed to check if user exists: %s", err))
 	}
 
 	// check if url already exists
 	var shortenedURL string
 	err = r.dbSlave.QueryRow(ctx, "SELECT shortened_url FROM url_shorteners WHERE original_url = $1", params.URL).Scan(&shortenedURL)
 	if err != nil && !errors.Is(err, pgx.ErrNoRows) {
-		return nil, fmt.Errorf("failed to check if url already exists: %w", err)
+		return nil, status.Error(codes.Internal, fmt.Sprintf("failed to check if url already exists: %s", err))
 	}
 
 	if shortenedURL != "" {
-		return nil, fmt.Errorf("url: %s already exists with shortened url: %s", params.URL, shortenedURL)
+		return nil, status.Error(codes.AlreadyExists, fmt.Sprintf("url: %s already exists with shortened url: %s", params.URL, shortenedURL))
 	}
 
 	err = r.dbMaster.QueryRow(ctx,
 		"INSERT INTO url_shorteners (user_id, original_url, shortened_url, datetime) VALUES ($1, $2, $3, $4) RETURNING id",
 		params.UserID, params.URL, params.ShortenedURL, params.DateTime).Scan(&id)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create url: %w", err)
+		return nil, status.Error(codes.Internal, fmt.Sprintf("failed to create url: %s", err))
 	}
 
 	return &rpc.URLShortener{
@@ -122,11 +124,11 @@ func (r *urlShortenerRepo) GetShortenedURL(ctx context.Context, params *reposito
 	err := r.dbSlave.QueryRow(ctx, "SELECT user_id, original_url, shortened_url, datetime FROM url_shorteners WHERE original_url = $1", params.URL).
 		Scan(&t.UserID, &t.OriginalURL, &t.ShortenedURL, &t.Datetime)
 	if errors.Is(err, pgx.ErrNoRows) {
-		return nil, fmt.Errorf("url: %s not found: %w", params.URL, ErrNotFound)
+		return nil, status.Error(codes.NotFound, ErrNotFound)
 	}
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to get url: %w", err)
+		return nil, status.Error(codes.Internal, fmt.Sprintf("failed to get url: %s", err))
 	}
 
 	return &rpc.URLShortener{

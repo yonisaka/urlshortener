@@ -7,6 +7,8 @@ import (
 	"github.com/yonisaka/urlshortener/internal/di"
 	"github.com/yonisaka/urlshortener/internal/entities/repository"
 	"github.com/yonisaka/urlshortener/internal/infrastructure/datastore"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"os"
 	"testing"
@@ -114,7 +116,7 @@ func TestURLShortenerRepo_CreateURLShortener(t *testing.T) {
 			return test{
 				args:    args,
 				want:    nil,
-				wantErr: datastore.ErrNotFound,
+				wantErr: status.Error(codes.NotFound, datastore.ErrNotFound),
 				beforeFunc: func(t *testing.T) {
 					t.Helper()
 
@@ -341,7 +343,7 @@ func TestURLShortenerRepo_GetShortenedURL(t *testing.T) {
 			return test{
 				args:    args,
 				want:    nil,
-				wantErr: datastore.ErrNotFound,
+				wantErr: status.Error(codes.NotFound, datastore.ErrNotFound),
 				beforeFunc: func(t *testing.T) {
 					t.Helper()
 
